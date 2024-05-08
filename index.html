@@ -8,8 +8,12 @@
   </head>
   <header>Etch A Sketch</header>
   <div id="settings">
-    <input type="range" min="1" max="100" value="1" class="grid-size" id="pixel-range"></input>
+    <label for="color-picker">Pick a Color</label>
+    <input id="color-picker" type="color"></input>
+    <input type="range" min="1" max="100" value="4" class="grid-size" id="pixel-range"></input>
     <p>Grid size:<span id="slider-value"></span></p>
+    <label for="rainbow-mode">LGBTQ+</label>
+    <button id="rainbow-mode"></button>
 
 
   </div>             <!--settings container-->
