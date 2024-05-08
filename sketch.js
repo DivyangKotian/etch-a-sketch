@@ -1,22 +1,22 @@
 window.addEventListener('DOMContentLoaded', () => {   
-const gridContainer= document.querySelector(`#container`);          // container for sketching area
-const gridSlider= document.querySelector(`#pixel-range`);           // the slider itself
-const sliderValue= document.querySelector(`#slider-value`);         // span displaying slider value
-const colorValue=document.querySelector(`#color-picker`)            // value of pen color
-let selectedColor=colorValue.value;                                 //initialzing the pen with a default color black
-
-const rainbowMode=document.querySelector(`#rainbow-mode`);
-
-
-
-let gridValue = gridSlider.value;                                    // Initialize gridValue here with the initial value
-
-gridSlider.oninput = function() {                                    // on any change in slider input lets call a func to change the grid size
+    const gridContainer= document.querySelector(`#container`);          // container for sketching area
+    const gridSlider= document.querySelector(`#pixel-range`);           // the slider itself
+    const sliderValue= document.querySelector(`#slider-value`);         // span displaying slider value
+    const colorValue=document.querySelector(`#color-picker`)            // value of pen color
+    let selectedColor=colorValue.value;                                 //initialzing the pen with a default color black
+    
+    const rainbowMode=document.querySelector(`#rainbow-mode`);
+    const rainbowStatus=document.querySelector(`#btn-status`);
+    
+    let gridValue = gridSlider.value;                                    // Initialize gridValue here with the initial value
+    
+    gridSlider.oninput = function() {                                    // on any change in slider input lets call a func to change the grid size
     sliderValue.textContent = `${this.value}*${this.value}`;         // update the slider value to current value
     gridValue=this.value;
     gridContainer.style.setProperty('--grid-size', gridValue);      // Set the custom property value for grid size for CSS
     createGrid(gridValue);                                         
 }       
+
 
 function createGrid(value){                                         
     gridContainer.textContent=``;                                   // empty the grid to reset on each func call
@@ -29,33 +29,54 @@ function createGrid(value){
     }
 }
 
+rainbowMode.addEventListener(`click`,(e)=>{
+    if (rainbowMode.classList.contains(`active`)){
+        rainbowMode.classList.add(`inactive`);
+        rainbowMode.classList.remove(`active`);
+        rainbowStatus.textContent=`binary mode meh...`;
+        selectedColor=colorValue.value;
+    }
+    else{
+        rainbowMode.classList.add(`active`);
+        rainbowMode.classList.remove(`inactive`);
+        rainbowStatus.textContent=`NON-BINARY MODE!!!!`;
+    }
+})
+
+let isMouseDown=false;                                               // initial value is set to off   
+
 colorValue.addEventListener('input', (e) => {
     selectedColor = colorValue.value;                               // storing color value   default black
 });
 
-
-// adding event listener is added accross the whole document to allow users to leave and enter canvas while holding M1
-
-let rainbowOn=false;                                                 // initial flag for rainbow is off
-
-rainbowMode.addEventListener(`click`,(e)=>{
-    rainbowOn=!rainbowOn;
-})
-console.log(rainbowOn);
-let isMouseDown=false;                                               // initial value is set to off   
+// adding event listener on grid to start painting
 
             document.addEventListener(`mousedown`, (e) =>{                      
-                isMouseDown=true;                                               // set flag to true, to start tracking
+                isMouseDown=true;
+                if(e.target.classList.contains(`tempGrid`)){ 
+                e.target.style.backgroundColor=getColor();                                              // set flag to true, to start tracking
+                }        
             });                       
             
             gridContainer.addEventListener(`mousemove`,(e) =>{                  // tracking mouse movement over the container to allow for dragging and coloring
                     if (isMouseDown){                                          
-                    e.target.style.backgroundColor = selectedColor;             // changes color to pen color
+                    e.target.style.backgroundColor = getColor();             // changes color to pen color
                 } 
                 })
                 
-                document.addEventListener('mouseup',(e)=>{                 // resetting flag upon release of M1
+                document.addEventListener('mouseup',(e)=>{                 // resetting flag upon release of M1, can be released anywhere in the doc
                     isMouseDown=false;
                 })
+
+function getColor(){
+    if(rainbowMode.classList.contains(`inactive`)){
+        return selectedColor;
+    }
+    else if(rainbowMode.classList.contains(`active`)){
+        let newColNum=Math.floor(Math.random()*16777215).toString(16);
+        selectedColor=`#`+newColNum
+        return selectedColor;
+    }
+}
 })
 
