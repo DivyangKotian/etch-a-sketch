@@ -5,6 +5,8 @@ const sliderValue= document.querySelector(`#slider-value`);         // span disp
 const colorValue=document.querySelector(`#color-picker`)            // value of pen color
 let selectedColor=colorValue.value;                                 //initialzing the pen with a default color black
 
+const rainbowMode=document.querySelector(`#rainbow-mode`);
+
 
 
 let gridValue = gridSlider.value;                                    // Initialize gridValue here with the initial value
@@ -36,6 +38,10 @@ colorValue.addEventListener('input', (e) => {
 
 let rainbowOn=false;                                                 // initial flag for rainbow is off
 
+rainbowMode.addEventListener(`click`,(e)=>{
+    rainbowOn=!rainbowOn;
+})
+console.log(rainbowOn);
 let isMouseDown=false;                                               // initial value is set to off   
 
             document.addEventListener(`mousedown`, (e) =>{                      
