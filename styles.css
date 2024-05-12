@@ -131,7 +131,7 @@ body{
 }
 
 .footer {
-    position: fixed;
+    position: absolute;
     left: 0;
     display: flex;
     align-items: center;
